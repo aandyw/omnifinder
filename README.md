@@ -1,0 +1,2 @@
+# omnifinder
+🧐 look for stuff
