@@ -1,0 +1,36 @@
+version: ''
+
+services:
+  api:
+    build:
+      context: ./server/api
+      dockerfile: Dockerfile
+    container_name: omni-api
+    ports:
+      - '4000:4000'
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/mydb
+      - AI_SERVICE_URL=http://ai:8000
+      - SEARCH_SERVICE_URL=http://search:8100
+      - PORT=4000
+    depends_on:
+      - db
+      - ai
+      - search
+    networks:
+      - app-network
+
+  ai:
+    build:
+      context: ./server/ai
+      dockerfile: Dockerfile
+    container_name: omni-ai
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - VECTOR_DB_URL=http://pinecone:8100
+    depends_on:
+      - pinecone
+    networks:
+      - app-network
